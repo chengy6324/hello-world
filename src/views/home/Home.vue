@@ -1,5 +1,17 @@
 <template>
   <div id="home" class="wrapper">
+    <nav-bar class="home-nav">
+      <template v-slot:center>
+        购物街
+      </template>
+    </nav-bar>
+    <swiper>
+      <swiper-item v-for="item in banners">
+        <a :href="item.link">
+          <img :src="item.image" alt="">
+        </a>
+      </swiper-item>
+    </swiper>
 <!--    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>-->
 <!--    <scroll class="content"-->
 <!--            ref="scroll"-->
@@ -25,7 +37,30 @@
   // import RecommendView from './childComps/RecommendView'
   // import FeatureView from './childComps/FeatureView'
   //
-  // import NavBar from 'components/common/navbar/NavBar'
+  import NavBar from '@/components/common/navbar/NavBar'
+  import { getHomeMultidata } from "@/network/home"
+  import {Swiper, SwiperItem} from "@/components/common/swiper"
+  export default {
+    name: "Home",
+    components: {
+      NavBar,
+      Swiper,
+      SwiperItem
+    },
+    data() {
+      return {
+        banners: [],
+        recommends: []
+      }
+    },
+    created() {
+      getHomeMultidata().then(res => {
+          this.banners = res.data.banner.list;
+          this.recommends = res.data.recommend.list;
+        }
+      )
+    }
+  }
   // import TabControl from 'components/content/tabControl/TabControl'
   // import GoodList from 'components/content/goods/GoodsList'
   // import Scroll from 'components/common/scroll/Scroll'
